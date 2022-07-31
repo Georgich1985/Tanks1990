@@ -118,6 +118,9 @@ def start_game():
                     missile = Missile(missile_img, player.getPos(), player.getDirection(), 7)
                     object_list.add(missile)
                     missiles_list.add(missile)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    menu()
         # for m in missiles_list:
 
         object_list.update()
