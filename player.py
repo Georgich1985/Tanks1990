@@ -1,10 +1,9 @@
 from resources import *
 
-
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = player_img
+        self.image = playerV1_img
         self.rect = self.image.get_rect()
         self.rect.center = ((WIDTH / 2, HEIGHT - 50))
         self.direction = 4
@@ -16,29 +15,30 @@ class Player(pygame.sprite.Sprite):
         return self.direction
 
     def update(self):
+        global flag, flag1
         if flag1 == True:
             pressed_button = pygame.key.get_pressed()
             if flag == True:
                 if pressed_button[pygame.K_w]:
-                    self.image = player_img
+                    self.image = playerV1_img
                     self.direction = 4
                     self.rect.y -= 5
                     if self.rect.bottom <= 0:
                         self.rect.top = HEIGHT
                 elif pressed_button[pygame.K_s]:
-                    self.image = pygame.transform.rotate(player_img, 180)
+                    self.image = pygame.transform.rotate(playerV1_img, 180)
                     self.direction = 3
                     self.rect.y += 5
                     if self.rect.top >= HEIGHT:
                         self.rect.bottom = 0
                 elif pressed_button[pygame.K_a]:
-                    self.image = pygame.transform.rotate(player_img, 90)
+                    self.image = pygame.transform.rotate(playerV1_img, 90)
                     self.direction = 2
                     self.rect.x -= 5
                     if self.rect.right <= 0:
                         self.rect.left = WIDTH
                 elif pressed_button[pygame.K_d]:
-                    self.image = pygame.transform.rotate(player_img, -90)
+                    self.image = pygame.transform.rotate(playerV1_img, -90)
                     self.direction = 1
                     self.rect.x += 5
                     if self.rect.left >= WIDTH:
