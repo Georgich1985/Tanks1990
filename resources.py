@@ -37,6 +37,9 @@ right_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/right_b
 fire_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/fire_button.png'))
 wasd_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/wasd_button.png'))
 arrows_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/arrows_button.png'))
+continue_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/continue_button.png'))
+newgame_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/newgame_button.png'))
+menu_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/menu_button.png'))
 
 vrag1_img = pygame.image.load(os.path.join(image_folder, 'enemies/vrag1.png'))
 vrag2_img = pygame.image.load(os.path.join(image_folder, 'enemies/vrag2.png'))
