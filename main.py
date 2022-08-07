@@ -18,6 +18,14 @@ class Button(pygame.sprite.Sprite):
         self.rect.center = pos
 
 
+class Base(pygame.sprite.Sprite):
+    def __init__(self, texture, pos):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = texture
+        self.rect = self.image.get_rect()
+        self.rect.center = pos
+
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, texture, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -104,9 +112,10 @@ def start_game():
     pygame_clock = pygame.time.Clock()
     player = Player()
     vrag1 = Enemy(vrag1_img, (300, 300))
+    base = Base(base_img, (300, 500))
     missiles_list = pygame.sprite.Group()
     object_list = pygame.sprite.Group()
-    object_list.add(player, vrag1)
+    object_list.add(player, vrag1, base)
     while game_proc:
         pygame_clock.tick(fps)
         screen.blit(fon2_img, fon2_img.get_rect())

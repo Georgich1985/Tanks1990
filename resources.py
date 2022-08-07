@@ -20,6 +20,8 @@ water_img = pygame.image.load(os.path.join(image_folder, 'landscape/water.png'))
 fon1_img = pygame.image.load(os.path.join(image_folder, 'background1.jpg'))
 fon2_img = pygame.image.load(os.path.join(image_folder, 'background2.jpg'))
 
+base_img = pygame.image.load(os.path.join(image_folder, 'base.png'))
+
 playerV1_img = pygame.image.load(os.path.join(image_folder, 'player/tankv1.png'))
 playerV2_img = pygame.image.load(os.path.join(image_folder, 'player/tankv2.png'))
 playerV3_img = pygame.image.load(os.path.join(image_folder, 'player/tankv3.png'))
