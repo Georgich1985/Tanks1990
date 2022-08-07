@@ -1,12 +1,12 @@
 import pygame
 import os
+import random
 
 HEIGHT = 600
 WIDTH = 600
 
 current_volume = 0.05
 flag = True
-flag1 = True
 menu_proc = True
 opt_proc = True
 game_proc = True
@@ -44,6 +44,8 @@ arrows_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/arrows
 continue_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/continue_button.png'))
 newgame_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/newgame_button.png'))
 menu_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/menu_button.png'))
+yes_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/yes_button.png'))
+no_button_img = pygame.image.load(os.path.join(image_folder, 'buttons/no_button.png'))
 
 vrag1_img = pygame.image.load(os.path.join(image_folder, 'enemies/vrag1.png'))
 vrag2_img = pygame.image.load(os.path.join(image_folder, 'enemies/vrag2.png'))
