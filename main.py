@@ -96,6 +96,23 @@ class Missile(pygame.sprite.Sprite):
             self.rect.y -= self.speed
 
 
+def success():
+    yes_btn = Button((WIDTH/2, HEIGHT/2 +50), continue_button_img)
+    no_btn = Button((WIDTH/2, HEIGHT/2 -50), continue_button_img)
+    button_list = pygame.sprite.Group()
+    button_list.add(yes_btn, no_btn)
+    screen.blit(fon1_img, fon1_img.get_rect())
+    button_list.draw(screen)
+    pygame.display.flip()
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if yes_btn.rect.collidepoint(mouse_pos):
+                    return True
+                if no_btn.rect.collidepoint(mouse_pos):
+                    return False
+
 def pause():
     global screenshot
     continue_button_pause = Button((WIDTH/2, HEIGHT/2 +50), continue_button_img)
@@ -123,7 +140,7 @@ def pause():
                 if options_button_pause.rect.collidepoint(mouse_pos):
                     options()
                 if menu_button_pause.rect.collidepoint(mouse_pos):
-                    return False
+                    return not success()
                 if quit_button_pause.rect.collidepoint(mouse_pos):
                     sys.exit()
         pygame.display.flip()
@@ -194,8 +211,9 @@ def start_game():
         screen.blit(fon2_img, fon2_img.get_rect())
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
+                if success():
+                    sys.exit()
+            if event.type == pygame .KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     missile = Missile(missile_img, player.getPos(), player.getDirection(), 7)
                     object_list.add(missile)
@@ -226,11 +244,13 @@ def menu():
     while menu_proc:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                sys.exit()
+                if success():
+                    sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if quit_button.rect.collidepoint(mouse_pos):
-                    menu_proc = False
+                    if success():
+                        menu_proc = False
                 if options_button.rect.collidepoint(mouse_pos):
                     options()
                 if play_button.rect.collidepoint(mouse_pos):
