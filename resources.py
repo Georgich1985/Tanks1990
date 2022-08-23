@@ -49,3 +49,31 @@ missile_img = pygame.image.load(os.path.join(image_folder, 'missile.png'))
 
 fon_music = os.path.join(sound_folder, 'Main_Theme.mp3')
 battle1_music = os.path.join(sound_folder, 'Battle1.mp3')
+
+
+landscape_img_list = [pol_img, forest_img, brick_img, beton_img, water_img]
+
+level1_template = [[1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+                   [1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+                   [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+                   [1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
+                   [1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 1, 1],
+                   [1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1],
+                   [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0],
+                   [0, 0, 0, 1, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 0],
+                   [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                   [1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1],
+                   [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1],
+                   [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1],
+                   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                   [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1]]
+
+
+def levelGenerator(level):
+    spisok = ((0.2, 0.2, 0.2, 0.4), (0.1, 0.1, 0.1, 0.7), (0.3, 0.3, 0.2, 0.1))
+    level1_bricks = []
+    all_elements = 100
+    for i in range(4):
+        level1_bricks.extend([i+1] * int(all_elements * spisok[level][i]))
+    return level1_bricks

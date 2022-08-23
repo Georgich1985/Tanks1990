@@ -18,6 +18,15 @@ class Button(pygame.sprite.Sprite):
         self.rect.center = pos
 
 
+class Landscape(pygame.sprite.Sprite):
+    def __init__(self, pos, texture_level):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = landscape_img_list[texture_level]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = pos
+        self.health = texture_level
+
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, texture, pos):
         pygame.sprite.Sprite.__init__(self)
@@ -31,6 +40,7 @@ class Enemy(pygame.sprite.Sprite):
         self.directionListDown = ["up", "right", "left"]
         self.directionListRight = ["up", "down", "left"]
         self.directionListLeft = ["up", "down", "right"]
+        self.speed = 1
 
     def getPos(self):
         return self.rect.center
@@ -46,21 +56,34 @@ class Enemy(pygame.sprite.Sprite):
 
     def update(self):
         if self.direction == "up":
-            self.rect.y -= 5
+            self.rect.y -= self.speed
             self.image = vrag1_img
             self.directionInt = 4
         elif self.direction == "down":
-            self.rect.y += 5
+            self.rect.y += self.speed
             self.image = pygame.transform.rotate(vrag1_img, 180)
             self.directionInt = 3
         elif self.direction == "right":
-            self.rect.x += 5
+            self.rect.x += self.speed
             self.image = pygame.transform.rotate(vrag1_img, -90)
             self.directionInt = 1
         elif self.direction == "left":
-            self.rect.x -= 5
+            self.rect.x -= self.speed
             self.image = pygame.transform.rotate(vrag1_img, 90)
             self.directionInt = 2
+        self.changeDirectionSelf()
+
+    def stepBack(self):
+        if self.direction == "up":
+            self.rect.y -= self.speed
+        if self.direction == "down":
+            self.rect.y += self.speed
+        if self.direction == "left":
+            self.rect.x += self.speed
+        if self.direction == "right":
+            self.rect.x -= self.speed
+
+    def changeDirectionSelf(self):
         if self.rect.right >= WIDTH:
             self.rect.right = WIDTH - 1
             self.direction = self.directionListRight[random.randint(0, 2)]
@@ -73,6 +96,9 @@ class Enemy(pygame.sprite.Sprite):
         elif self.rect.top <= 0:
             self.rect.top = 1
             self.direction = self.directionListUp[random.randint(0, 2)]
+
+    def changeDirection(self, directionList):
+        self.direction = random.choice(directionList)
 
 
 class Missile(pygame.sprite.Sprite):
@@ -97,8 +123,8 @@ class Missile(pygame.sprite.Sprite):
 
 
 def success():
-    yes_btn = Button((WIDTH/2, HEIGHT/2 +50), continue_button_img)
-    no_btn = Button((WIDTH/2, HEIGHT/2 -50), continue_button_img)
+    yes_btn = Button((WIDTH / 2, HEIGHT / 2 + 50), continue_button_img)
+    no_btn = Button((WIDTH / 2, HEIGHT / 2 - 50), continue_button_img)
     button_list = pygame.sprite.Group()
     button_list.add(yes_btn, no_btn)
     screen.blit(fon1_img, fon1_img.get_rect())
@@ -113,15 +139,16 @@ def success():
                 if no_btn.rect.collidepoint(mouse_pos):
                     return False
 
+
 def pause():
     global screenshot
-    continue_button_pause = Button((WIDTH/2, HEIGHT/2 +50), continue_button_img)
-    options_button_pause = Button((WIDTH/2,
+    continue_button_pause = Button((WIDTH / 2, HEIGHT / 2 + 50), continue_button_img)
+    options_button_pause = Button((WIDTH / 2,
                                    continue_button_pause.rect.centery + options_button_img.get_height() + 7),
                                   options_button_img)
-    menu_button_pause = Button((WIDTH/2,
+    menu_button_pause = Button((WIDTH / 2,
                                 options_button_pause.rect.centery + menu_button_img.get_height() + 7), menu_button_img)
-    quit_button_pause = Button((WIDTH/2,
+    quit_button_pause = Button((WIDTH / 2,
                                 menu_button_pause.rect.centery + quit_button_img.get_height() + 7), quit_button_img)
     button_list = pygame.sprite.Group()
     button_list.add(continue_button_pause, options_button_pause, menu_button_pause, quit_button_pause)
@@ -197,15 +224,22 @@ def start_game():
     pygame.mixer.music.set_volume(current_volume)
     pygame.mixer.music.play(-1)
     game_proc = True
-    fps = 30
+    fps = 120
     pygame_clock = pygame.time.Clock()
     player = Player()
-    vrag1 = Enemy(vrag1_img, (300, 300))
-    enemy_list = []
-    enemy_list.append(vrag1)
+    vrag = Enemy(vrag1_img, (WIDTH/2, 60))
+    enemy_list = [vrag]
     missiles_list = pygame.sprite.Group()
     object_list = pygame.sprite.Group()
-    object_list.add(player, vrag1)
+    object_list.add(player, vrag)
+    landscape_list = pygame.sprite.Group()
+    level = levelGenerator(0)
+    for i in range(len(level1_template)):
+        for j in range(len(level1_template)):
+            if level1_template[i][j] == 1:
+                land = Landscape((j * 40, i * 40), level.pop(random.randint(0, len(level) - 1)))
+                landscape_list.add(land)
+                object_list.add(land)
     while game_proc:
         pygame_clock.tick(fps)
         screen.blit(fon2_img, fon2_img.get_rect())
@@ -213,20 +247,37 @@ def start_game():
             if event.type == pygame.QUIT:
                 if success():
                     sys.exit()
-            if event.type == pygame .KEYDOWN:
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    missile = Missile(missile_img, player.getPos(), player.getDirection(), 7)
+                    missile = Missile(missile_img, player.getPos(), player.getDirection(), 2)
                     object_list.add(missile)
                     missiles_list.add(missile)
                 if event.key == pygame.K_ESCAPE:
-                    pygame.image.save(screen, "screenshot.jpg")
                     game_proc = pause()
         for enemy in enemy_list:
             if enemy.canFire():
-                missile = Missile(missile_img, enemy.getPos(), enemy.getDirection(), 7)
+                missile = Missile(missile_img, enemy.getPos(), enemy.getDirection(), 2)
                 missiles_list.add(missile)
                 object_list.add(missile)
         object_list.update()
+        listLand = pygame.sprite.spritecollide(player, landscape_list, False, None)
+        if len(listLand) > 0:
+            player.stepBack()
+        direction_list = ['up', 'down', 'right', 'left']
+        listLand = pygame.sprite.spritecollide(vrag, landscape_list, False, None)
+        if len(listLand) > 0:
+            i = listLand.pop(0)
+            x, y = i.rect.center
+            if vrag.rect.x > x:
+                direction_list.remove('left')
+            if vrag.rect.x < x:
+                direction_list.remove('right')
+            if vrag.rect.y > y:
+                direction_list.remove('up')
+            if vrag.rect.y < y:
+                direction_list.remove('down')
+            vrag.stepBack()
+            vrag.changeDirection(direction_list)
         object_list.draw(screen)
         pygame.display.flip()
 
